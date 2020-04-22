@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+
+  - name: creataing a group
+    group:
+      name: vamshi
+      state: present
+
+  - name: creating a user
+    user:
+      name: harshad #username
+      password: "{{ 'password' | password_hash('sha512') }}" #password for user
+      group: vamshi
+      state: present
+      shell: /bin/bash # Defaults to /bin/bash
+      system: no # Defaults to no
+      createhome: yes # Defaults to yes
+      home: /home/harshad
+

@@ -1,0 +1,43 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  become_user: root
+  vars_files:
+    - aws_credentials.yaml
+  tasks:
+  - pip:
+      name: boto 
+  - name: creating vpc and subnets
+    ec2_vpc_net:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      name: ansible
+      cidr_block: 172.10.0.0/16
+      region: us-east-1
+      state: present
+    register: vpc
+
+  - name: associate subnet to the VPC
+    ec2_vpc_subnet:
+      state: present
+      vpc_id: "{{ vpc_id }}"
+      region: "{{ region }}"
+      cidr: "{{ subnet_cidr }}"
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      map_public: yes
+      resource_tags:
+        Name: "{{ subnet_name }}"
+    register: subnet
+ 
+  - name: create IGW
+    ec2_vpc_igw:
+      vpc_id: "{{ vpc_id }}"
+      region: "{{ region }}"
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      state: "present"
+      tags:
+        Name: "{{ igw_name }}"
+    register: igw

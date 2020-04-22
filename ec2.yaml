@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  become_user: root
+  vars_files:
+    - aws_credentials.yaml
+  tasks:
+  - pip:
+      name: boto 
+  - name: creating ec2 instance in aws
+    ec2:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key}}"
+      key_name: latest                #key pair of instance creation
+      instance_type: t2.micro           #type
+      image: ami-04b9e92b5572fa0d1       #ami id linux machine
+      wait: yes
+      group:  launch-wizard-14           #security groups
+      count: 1 #no of instances
+      vpc_subnet_id: subnet-043d4b6880716276c       #vpc subnet id
+      region: us-east-1                              #required region
+      assign_public_ip: yes
+
+

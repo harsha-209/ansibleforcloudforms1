@@ -1,0 +1,42 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+
+  - name: creating a directory
+    shell:
+      cmd: mkdir -p /opt/tomcat
+
+  - name: 
+
+  - name: installing tomcat and now adding war file
+    get_url:
+      url: https://www-us.apache.org/dist/tomcat/tomcat-8/v8.5.50/bin/apache-tomcat-8.5.50.tar.gz
+      dest: /home/ubuntu/opt/tomcat
+   
+  - name: untaring the warfile
+    unarchive:
+      src: /home/ubuntu/apache-tomcat-8.5.50.tar.gz
+      dest: /home/ubuntu
+      remote_src: yes
+
+  - name: changing the tomcat port 
+    replace:
+      dest: /home/ubuntu/apache-tomcat-8.5.50/conf/server.xml
+      regexp: '    <Connector port="8080" protocol="HTTP/1.1"' #oldline
+      replace: '    <Connector port="8091" protocol="HTTP/1.1"' #newline
+      backup: yes
+  
+
+#  - name: stoping tomcat
+#    shell:
+#      cmd: ./shutdown.sh 
+#      chdir: /home/ubuntu/apache-tomcat-8.5.50/bin/
+  
+  - name: starting tomcat
+    shell:
+      cmd: ./startup.sh
+      chdir: /home/ubuntu/apache-tomcat-8.5.50/bin/
+
