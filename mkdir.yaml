@@ -3,10 +3,10 @@
   gather_facts: false
   become: true
 #  become_method: sudo
-  become_user: root
+  become_user: ec2-user
   tasks:
 
-  - name: creataing a directory
+  - name: creating a directory
     shell:
-      cmd: mkdir harshad1
+      cmd: mkdir akhil
 
