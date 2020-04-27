@@ -5,15 +5,24 @@
   become_method: sudo
   tasks:
   - name: updating repositories
+    become: true
+    become_user: root
+    become_method: sudo
     shell: 
       cmd: yum update -y
    
   - name: installing  nginx
+    become: true
+    become_user: root
+    become_method: sudo
     yum:
       name: nginx 
       state: present
 
   - name: restart nginx
+    become: true
+    become_user: root
+    become_method: sudo
     service: 
       name: nginx
       state: restarted
