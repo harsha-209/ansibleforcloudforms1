@@ -1,0 +1,7 @@
+- name: Hello World Sample
+  hosts: all
+  tasks:
+    - name: Hello Message
+      yum:
+        name: nginx
+        state: present
