@@ -2,6 +2,9 @@
   hosts: all
   tasks:
     - name: Hello Message
+      become: true
+      become_user: root
+      become_method: sudo
       yum:
         name: nginx
         state: present
